@@ -8,8 +8,28 @@ var host = process.argv[2];
 
 // Configure our HTTP server to respond with Hello World to all requests.
 var server = http.createServer(function (request, response) {
-  response.writeHead(200, {"Content-Type": "text/plain"});
-  response.end("Hello World\n");
+	console.log('serve: ' + request.url);
+
+	var options = {
+		hostname: host,
+		port: 80,
+		path: request.url,
+		method: 'GET'
+	};
+
+	
+	var proxy = http.request(options, function (res) {
+		res.pipe(response, {
+			end: true
+		});
+	});
+
+	request.pipe(proxy, {
+		end: true
+	});
+
+	//response.writeHead(200, {"Content-Type": "text/plain"});
+	//response.end("Hello World\n");
 });
 
 // Listen on port 8000, IP defaults to 127.0.0.1
