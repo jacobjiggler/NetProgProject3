@@ -1,5 +1,9 @@
 // Load the http module to create an http server.
 var http = require('http');
+var filter = require('stream-filter');
+function capitalize(data){
+	return data.toUpperCase();
+}
 
 
 var host;
